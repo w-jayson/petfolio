@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
+using Petfolio.Application.UseCases.GetAll;
 using Petfolio.Application.UseCases.Pets.Register;
 using Petfolio.Application.UseCases.Pets.Update;
 using Petfolio.Communication.Requests;
@@ -13,6 +14,7 @@ namespace Petfolio.API.Controllers
     {
         [HttpPost]
         [ProducesResponseType(typeof(ResponseRegisterPetJson), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ResponseErrorsJson), StatusCodes.Status400BadRequest)]
         public IActionResult Register([FromBody] RequestRegisterPetJson request)
         {
             var response = new RegisterPetUseCase().Execute(request);
@@ -20,9 +22,11 @@ namespace Petfolio.API.Controllers
             return Created(string.Empty, response);
         }
 
+
         [HttpPut]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ResponseErrorsJson), StatusCodes.Status400BadRequest)]
         public IActionResult Update([FromRoute] int id, [FromBody] RequestRegisterPetJson request)
         {
             var useCase = new UpdatePetUseCase();
@@ -30,5 +34,24 @@ namespace Petfolio.API.Controllers
 
             return NoContent();
         }  
+    
+    
+        [HttpGet]
+        [ProducesResponseType(typeof(ResponseAllPetJson), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+
+        public IActionResult GetAll()
+        {
+            var useCase = new getAllPetsUseCase();
+            var response = useCase.Execute();
+            if (response.Pets.Any())
+            {
+                return Ok(response);
+            } else
+            {
+                return NoContent();
+            }
+            
+        }
     }
 }
