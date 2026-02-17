@@ -2,7 +2,7 @@ using Petfolio.Communication.Responses;
 
 namespace Petfolio.Application.UseCases.GetAll
 {
-    public class getAllPetsUseCase
+    public class GetAllPetsUseCase
     {
         public ResponseAllPetJson Execute()
         {
